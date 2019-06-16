@@ -1,0 +1,506 @@
+L,0
+T,n,north,*F4
+A,GO,N
+A,ZI,12
+T,n,north,*
+A,GO,N
+T,e,east,*F4
+A,GO,E
+A,ZI,12
+T,e,east,*
+A,GO,E
+T,s,south,*F4
+A,GO,S
+A,ZI,12
+T,s,south,*
+A,GO,S
+T,w,west,*F4
+A,GO,W
+A,ZI,12
+T,w,west,*
+A,GO,W
+T,u,up,*F4
+A,GO,U
+A,ZI,12
+T,u,up,*
+A,GO,U
+T,d,down,*F4
+A,GO,D
+A,ZI,12
+T,d,down,*
+A,GO,D
+T,wear,put on,*
+A,PO
+T,remove,take off,*
+A,TO
+T,get,take,pick up,catch,*
+A,GE
+T,drop,put,throw,release,*
+A,DR
+T,ex,exam,examine,look at,*
+A,EX
+T,i,inv,inventory,*
+A,IN
+T,score,*
+A,SC
+T,load,*
+A,LO
+A,IS,-1
+T,save,*
+A,SA
+T,eat bread,eat loaf,*C5
+A,PR,yummy yummy!
+A,ZO,5
+T,eat cheese,*C4
+A,PR,Far too mouldy!
+T,eat,*
+A,PR,No thanks.
+T,feed cat,drop mouse,release mouse,*C6.O12
+A,PR,The cat takes both mouse and cheese and then runs off.
+A,IS,10
+A,AF,4,F
+A,ZO,6
+A,ZO,12
+A,HC,0
+T,hit,kill,attack,*
+A,PR,Sorry. No violence is allowed in this game.
+T,show,give,accuse,feed,*
+A,PR,Not interested.
+T,quit,*
+A,SC
+A,QU
+L,1
+D,*,In the middle of the village green.
+D,*-V1,Beyond the north end of the green you can see your home - the mill. To east is the inn. The church where all this trouble began is to the south. You can hear the goats making goaty noises to the west.
+T,inn,*-F6
+A,GO,E
+T,e,east,inn,*F6
+A,PR,The innkeeper refuses to let you enter the inn.
+T,e,east,inn,*-F11
+A,GO,E
+A,AF,11,T
+A,IC,1,100
+T,n,north,*-F11
+A,GO,N
+A,AF,11,T
+A,IC,1,100
+T,w,west,*-F11
+A,GO,W
+A,AF,11,T
+A,IC,1,100
+T,s,south,*-F11
+A,GO,S
+A,AF,11,T
+A,IC,1,100
+C,N,*,4
+C,S,*,6
+C,E,*,2
+C,W,*,5
+L,2
+D,*,The bar in the Melbourne Inn.
+D,*F5,Some fool has balanced a pointed hat on top of the kitchen door!
+D,*-V2,The inn is closed at the moment due to the unexplained spoiling of the ale. The kitchen door sits slightly ajar at the east end of the room.
+T,balance hat,put hat,place hat,*C1
+A,PR,You manage to balance the hat on top of the kitchen door.
+A,AF,5,T
+A,ZO,1
+T,e,east,kitchen,*F5
+A,PR,The hat falls to the floor.
+A,ZI,1
+A,AF,5,F
+A,GO,E
+T,get hat,*
+A,ZI,1
+A,AF,5,F
+A,GE
+T,call,shout,*-F5
+A,PR,'The innkeeper comes into the room, but seeing you he crosses himself and dashes back into the kitchen.'
+T,call,shout,*F5
+A,PR,The innkeeper pushes the kitchen door open and steps into the room.
+A,PR,PLOP! The hat lands on his head. It looks like a thimble on a giants head. He throws you and your hat out of the inn.
+A,IS,10
+A,GO,W
+A,ZI,1
+A,AF,5,F
+A,AF,6,T
+T,leave,out,*
+A,GO,W
+C,E,*,3
+C,W,*,1
+L,3
+D,*,Kitchen in the Melbourne.
+D,*-V3,It seems surprisingly empty, Perhaps the innkeeper is a little short of money at the moment.
+T,steal cheese,*
+A,GE
+T,cheese,*O4
+A,PR,GET OFF MY CHEESE! What do you mean openly trying to take my food!
+T,give,*C10.O5
+A,PR,The innkeeper says 'Oh goody goody. I can bake some more loaves now.' and grabs your sack of flour. 'You can have this loaf.'
+A,MO,5,0
+A,ZO,10
+T,loaf,bread,*O5
+A,PR,GET OFF MY BREAD! What do you mean trying to take my last loaf!
+T,leave,out,bar,*
+A,GO,W
+C,W,*,2
+L,4
+D,*,At the north end of the village green.
+D,*-V4,You remember coming here in the past to throw rotten food (and the odd brick) at people in the stocks. This is where they always burnt witches. You remember throwing on wood... Those were good times.
+T,put hat,place hat,try hat,*C1.F10
+A,PR,It fits!
+A,PR,A crowd of villagers gather. 'The blacksmith is the witch!' screams the priest. 'Burn him! Burn him! Burn him!'. And they do. Everyone has a real good time... roasting chestnuts and potatoes in the fire. You have cleared yourself.
+A,IS,20
+A,SC
+A,QU
+T,road,*
+A,GO,E
+C,S,*,1
+C,E,*,14
+L,5
+D,*,An area of grazing land.
+T,feed,cheese,*C4
+A,PR,A goat snatches your cheese and eats it.
+A,ZO,4
+T,feed,bread,loaf,*C5
+A,PR,A goat snatches your bread and eats it.
+A,ZO,5
+C,E,*,1
+L,6
+D,*,At the southern end of the village green.
+D,*-V6,A foul odour drifts from the direction of the meadow at the west of the green.
+T,meadow,*
+A,GO,W
+T,church,*
+A,GO,S
+C,W,*,8
+C,N,*,1
+C,S,*,10
+L,7
+D,*,At the edge of the village pond.
+D,*-V7,The pond is stagnant and smells foul.
+T,put toad,drop toad,throw toad,release toad,*C2.-F3
+A,DR
+A,PR,Splash...! The toad turns into a small boy. 'Where am I? What happened?' he mutters as he climbs out of the pond. 'Last thing I remember I was strolling in the woods!'
+A,AF,3,T
+A,IS,5
+T,feed duck,feed ducks,*C5
+A,PR,The ducks gobble up the bread and leave. There was something hidden in their nest.
+A,ZO,3
+A,ZO,5
+A,ZI,14
+A,IS,5
+T,fill,water,pond,*
+A,PR,It is impossible to get at the water.
+C,S,*,8
+L,8
+D,*V8,In the meadow.
+D,*-V8,In the middle of the meadow. To the north the ground becomes marshy. At the western end of the meadow you can see a wooden building.
+C,N,*,7
+C,W,*,9
+C,E,*,6
+L,9
+D,*,At the blacksmith's forge.
+D,*-V9,You remember coming here often in the past. The blacksmith always repairs everyones tools. He is a pretty good all round handyman.
+T,show gold,give gold,show coins,give coins,accuse,*C14
+A,PR,The blacksmith bursts into tears. 'Alright. I confess - I stole the woodcutter's gold.' he blurts out.
+A,PR,A crowd of villagers rush up and drag the pleading blacksmith away.
+A,IS,20
+A,AF,10,T
+A,MO,16,4
+T,show,give,accuse,forge,anvil,*
+A,PR,He shouts 'Be off with you! Little witch.'
+C,E,*,8
+L,10
+D,*,In the church nave.
+D,*-V10,The secret entrance to the crypt you found lies open. High above you is the belfry balcony. The front door is to the north. In the south wall is a small door.
+T,hat,*F2.O9
+A,PR,Tug...
+A,ZI,1
+A,AF,1,F
+A,ZO,9
+A,GE
+A,PR,The priest storms off.
+T,crypt,*
+A,GO,D
+T,belfry,*
+A,GO,U
+C,N,*,6
+C,S,*,13
+C,D,*,12
+C,U,*,11
+L,11
+D,*,In the belfry.
+D,*-V11,Far below you can see the church nave.
+T,ring bell,*-(F1/F2)
+A,PR,The bell tolls and nearly deafens you.
+A,MO,9,10
+A,PR,You see the priest run into the church directly below you.
+A,AF,1,T
+T,ring bell,*
+A,PR,Ding dong...!
+T,drop hat,throw hat,*C1.F1
+A,PR,The hat drops from the belfry and lands over the priest's head.'
+A,IS,10
+A,AF,2,T
+A,ZO,1 
+T,drop hat,throw hat,*C1.-F1
+A,PR,Weeee.... it gall from the belfrey.
+A,MO,1,10
+T,nave,leave,*
+A,GO,D
+C,D,*,10
+L,12
+D,*,In the secret crypt.
+D,*-V12,The air is icy cold. The floor is intricately carved with strange markings. On the wall are lit torches.
+T,torches,torch,wall,walls,*
+A,PR,A couple of torches are firmly attached to the wall by brackets.
+T,bracket,brackets,*
+A,PR,Just plain iron brackets.
+T,floor,markings,*
+A,PR,You can make no sense of the markings but you can see they are well carved.
+T,leave,*
+A,GO,U
+C,U,*,10
+L,13
+D,*,In the churchyard.
+T,dig,grave,headstone,tomb,*
+A,PR,Careful... they bury grave robbers around here!
+T,n,north,church,*-F4
+A,PR,You trip over a black cat which appears from behind a headstone!
+A,ZI,12
+A,AF,4,T
+A,IC,0,20
+T,church,*
+A,GO,N
+T,woods,*
+A,GO,W
+C,N,*,10
+C,W,*,18
+L,14
+D,*,The road.
+D,*-V14,You know this road well. To the north it passes by the mill on its way to town.
+T,w,west,*F8
+A,PR,WHOOPS! You tripped and split the water.
+A,AF,8,F
+T,follow road,along road,*
+A,GO,N
+C,W,*,4
+C,N,*,15
+L,15
+D,*,On a bridge over a stream.
+T,water,stream,fill,down,d,*
+A,PR,The stream is totally inaccessable from here.
+C,S,*,14
+C,N,*,16
+L,16
+D,*,The mill.
+T,listen,*-F7
+A,PR,You can hear a faint scurrying noise. You wonder if it is a rat.
+T,rafters,*-F7
+A,PR,Something is making noises. You wonder if it is a rat.
+T,rat,rats,*-F7
+A,PR,Rat! Pah! I'm a mouse you fool.
+T,feed mouse,drop cheese,*C4
+A,PR,The mouse scurries down and nibbles the cheese.
+A,AF,7,T
+A,ZO,4
+T,catch mouse,get mouse,take mouse,pick up mouse,*F7.C1.-(W1/F8)
+A,GE
+A,PR,You caught the mouse in the hat.
+T,catch mouse,get mouse,take mouse,pick up mouse,*F7
+A,PR,He slips through your fingers.
+T,cheese,*F7.(O6/C6)
+A,PR,The mouse holds onto the cheese.
+T,flour,sack,grain,bag,mill,*-F9
+A,PR,The miller growls at you!
+T,give,*F8.-F9
+A,PR,The miller puts the sack down, takes the hat and drinks some water.
+A,PR,He says 'Ta lad.' and then purs the rest over his head. As he does this you notice that the hat is too small for him to wear.
+A,IS,10
+A,AF,8,F
+A,ZI,10
+A,AF,9,T
+T,give,*F8.F9
+A,PR,He smiles and says 'Go away creep.'
+C,S,*,15
+C,W,*,17
+L,17
+D,*,By the stream.
+D,*-V17,A loud sploshing sound comes from the water wheel. The water looks as fresh and clear as ever.
+T,fill,*C1.-(W1/C6)
+A,PR,If you insist.
+A,AF,8,T
+T,fill hat,*W1
+A,PR,Gargle...gargle...bubble! You are unable to hold your breath any longer and take your head out of the stream.
+T,mill,*
+A,GO,E
+C,E,*,16
+L,18
+D,*,In the deep dark woods.
+D,*-V18,Careful! You might get lost!
+C,E,*,13
+C,W,*,19
+L,19
+D,*,In the deep dark woods.
+C,E,*,18
+C,S,*,20
+C,W,*,21
+L,20
+D,*,In the deep dark woods.
+C,W,*,23
+C,N,*,19
+C,S,*,22
+C,E,*,21
+L,21
+D,*,In the deep dark woods.
+C,W,*,20
+C,E,*,21
+C,S,*,23
+L,22
+D,*,In the deep dark woods.
+C,N,*,20
+C,E,*,23
+L,23
+D,*,In the deep dark woods.
+D,*-V23,As you arrived you thought you saw someone run away.
+C,N,*,20
+C,E,*,24
+C,W,*,22
+L,24
+D,*,In a clearing in the woods.
+D,*-W1,It is sheltered from the wind here and the sun is uncomfortably hot.
+D,*-V24,You hear a loud chopping sound to the south.
+T,s,south,*-V25.W1
+A,IS,10
+A,GO,S
+C,W,*,22
+C,S,*,25
+L,25
+D,*,The wood cutter's hut.
+T,hut,*
+A,PR,The woodcutter bars your way. 'I've already had my gold stolen. I'm not going to lose anything else. Keep out!'
+C,N,*,24
+O,0
+P,1
+O,1
+D,*-F8,a witch's hat.
+D,*F8,a witch's hat full of water.
+P,23
+N,hat,*
+S,EX,*,It has a label on the inside which says 'ACME Witch's Hat - SIZE 9'. You wonder who wears a size 9 hat!
+S,GE,*
+S,DR,*-(F8/C6)
+S,PO,*-(F8/C6)
+S,TO,*
+O,2
+D,*-F3,a small wart-covered toad.
+D,*F3,a wet and frightened goat herd.
+P,8
+S,GE,*-F3
+S,DR,*
+N,toad,boy,herd,*
+S,EX,*-F3,a very human looking toad.
+S,EX,*F3,a very toady looking human.
+O,3
+D,*,several ducks.
+P,7
+N,ducks,duck,*
+S,EX,*,They seem to be sitting on something.
+O,4
+D,*,a small piece of cheese.
+P,3
+N,cheese,*
+S,GE,*
+S,DR,*
+S,EX,*,Looks a bit cheesy!
+O,5
+D,*,a loaf of bread.
+P,3
+N,loaf,bread,*
+S,GE,*
+S,DR,*
+O,6
+D,*-F7,something moving around the rafters.
+D,*F7.-C6,a piece of cheese with a mouse attached to it.
+D,*F7.C6,the mouse and the cheese in the hat.
+P,16
+N,mouse,cheese,*F7
+S,GE,*
+S,DR,*
+O,7
+D,*,a large brass bell.
+P,11
+N,bell,*
+S,EX,*,a large church bell inscribed with the letters 'ring me!'.
+O,8
+D,*,a lot of goats.
+P,5
+N,goat,goats,*
+S,EX,*,They are tethered to posts. Strange! They seem to have eaten all the good grass they can reach. Perhaps they have not been moved for a while?
+O,9
+D,*-(F1/F2),a very small priest blessing the secret crypt.
+D,*-F1.-F2,a very agitated priest looking up at the belfrey.
+D,*F2,a priest wearing a black hat over his head and shoulders!
+P,12
+N,priest,*
+S,EX,*,He looks very small to you.
+O,10
+D,*,a sack of flour.
+P,-1
+N,sack,bag,flour,*
+S,GE,*
+S,DR,*
+S,EX,*,It is labelled 'MegaMill Flour Co.'
+O,11
+D,*-V25,an out of breath woodcutter resting on his axe.
+D,*-V25.W1,Suddenly the woodcutter snatches the hat and trys it on. 'I wonder if this will shield me from the sun?' he says. 'Pity... not my size.' he grumbles and replaces the hat on your head.
+D,*V25,the woodcutter hard at work.
+P,25
+N,woodcutter,*
+S,EX,*,A rather hot sweaty woodcutter.
+O,12
+D,*F7,a friendly black cat drooling around your ankles.
+D,*-F7,a friendly black cat.
+P,-1
+N,cat,*
+S,EX,*,It looks friendly.
+O,13
+D,*,the innkeeper.
+P,3
+N,innkeeper,*
+S,EX,*,He is rather large.
+O,14
+D,*,some gold coins!
+P,-1
+N,coins,gold,*
+S,GE,*
+S,DR,*
+S,EX,*,No. They are not sliced golden egg. They must have come from somewhere else.
+O,15
+D,*,The miller humping sacks about.
+P,16
+N,miller,*
+S,EX,*-F9,He looks hot and thirsty.
+S,EX,*F9,He looks wet.
+O,16
+D,*-F10,The blacksmith hard at work.
+D,*F10,The blacksmith in the stocks.
+P,9
+N,blacksmith,smith,*
+S,EX,*-F10,He looks rather hot.
+S,EX,*F10,He looks stuck.
+O,17
+D,*,some stocks.
+P,4
+N,stocks,*
+S,EX,*-F10,There is a brass plaque with 'Made by OXO' engraved in it.
+S,EX,*F10,There seems to be a blacksmith in them!!!
+E,0
+A,PR,A crowd of villagers gather round you. The priest points at the cat and says 'Look he has a black cat familiar! That proves he is a witch.'. They drag you away and test your inflammability.
+A,SC
+A,QU
+E,1
+A,PR,The church bell rings. It is midday. The villagers drag you away and burn you. It was a really jolly occasion and people came from miles around to see you.
+A,SC
+A,QU
+F
