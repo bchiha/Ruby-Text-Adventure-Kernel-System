@@ -14,7 +14,7 @@ The game loops the following until an end of game flag is true
 	Describe Location
 	Get command line
 	Process command line
-	updatecountdowns
+	Update Countdowns
 ```
 
 ## Input Structure
@@ -32,7 +32,7 @@ The overall structure is to have three data sections and an end identifier F.  A
 
 # Locations
 
-Locations are where the adventure moves to usually via North, East, South and West.  With AKS, Location zero is a special location that can't be reached but contains key triggers that are not location specific.  Like the word **Get**, it can be used in any location, but might not do anything usful.  Locations have the following structure and identifiers.
+Locations are where the adventure moves to usually via North, East, South and West.  With AKS, Location zero is a special location that can't be reached but contains key triggers that are not location specific.  Like the word **Get**, it can be used in any location, but might not do anything useful.  Locations have the following structure and identifiers.
 
 * `L,<number>` Location id with its location number.
 * `D,<condition>,<text>` Description of the location with a condition and text to display if condition is met.
@@ -54,10 +54,11 @@ Here are all valid action types and their data
 * `TO` Take off action
 * `DR` Drop action
 * `GO,<direction>` Move player to a new location in that direction
-* `HC,<counter number>` Stop a counter with counter number from decreasing
 * `IC,<counter number>,<int>` Initialise counter of counter number with value of int.
+* `HC,<counter number>` Stop a counter with counter number from decreasing
+* `RC,<counter number>` Resumes a counter with counter number decreasing
 * `IS,<int>` Increment score by the value of int
-* `MO,<object number>,<location>` Move an object to a location
+* `MO,<object number>,<location>` Move an object to a location, if location is 0 then a random location is given
 * `PR,<text>` Print the text
 * `ZI,<object number>` Zap in the object
 * `ZO,<object number>` Zap out the object
@@ -88,6 +89,7 @@ Objects are things that can be interacted with, like being picked up or looked a
 * `D,<condition>,<text>` Description of the object with a condition and text to display if condition is met.
 * `N,<namelist>,<conditions>` Name of the object that the user can type to interact with it.  The name list could contain multiple verbs.  And a condition to be true to have it useable
 * `P,<location>` The Place where the object is found.
+* `V,<number>` [Optional], if object is carried, add a score value of number. Defaults to 0
 * `S,<actiontype>,<condition>,<text>` Suitability to the action.  If something can be picked up or droped then this object will have the action type of 'GE' and 'DR', if the action is 'EX', then display a text for describing the object.  Not all actiontype are used, 
 
 Here is an example of an Object
@@ -127,6 +129,7 @@ Cx ......... Carrying object x
 Fx ......... Flag x
 Lx ......... at Location x
 Ox ......... Object x at current location
+Rx ......... Random chance of being true where x is whole number between 1-100
 Wx ......... Wearing object x
 Vx ......... Visited location x
 ```
@@ -142,7 +145,7 @@ Please have a look at **witch_hunt_aks.csv** for an example on how to use all th
 
 ## REQUIREMENTS:
 
-* ruby 1.9
+* ruby 1.9 or maybe higher?
 
 ## SETUP and FILE DESCRIPTIONS
 
@@ -159,4 +162,13 @@ $ruby adventure.rb <game data.csv>
 
 To run the example game call `$ruby adventure.rb witch_hunt_aks.csv`
 
-## NOTES
+## WRITE YOUR OWN ADVENTURE PROGRAM - USBORNE PUBLISHING ISBN 0 86020 741 2
+# By Jenny Tyler and Les Howarth
+
+Usborne Publishing printed a book in the 80's on how to write your own adventure games written in Basic.  I've been facinated by this book and have made some attempts to convert this game into more modern code.  One recent convertion is to write the game using [Scratch](https://scratch.mit.edu/projects/130894359/).
+
+I have also converted this game to use AKS.  You can now play this game using this game engine.  The game has simple descriptions and a fairly easy game to solve.  I've made some small changes to the origial AKS to include features needed for this game, like randomness, teleporting the player, halting and resuming timers and scoring on carried objects.
+
+To play this game call `$ruby adventure.rb haunted_house_aks.csv`
+
+I've also include a walkthrough just incase.

@@ -1,0 +1,44 @@
+Haunted House Walkthrough
+
+To win the game you must collect all treasures and end the game at the starting place.  There are some elements that are random.  If they do occur the steps taken will be in [] brackets
+
+Here is the quickest way to win the game.
+
+(Front of House)
+E, E, E, GET CAN, W, W, W, N, N
+
+(In the House first section)
+W, N, SEARCH COAT, GET KEY (for wooden door), S, E, N, N, GET VACUUM (for ghost),
+N, N, E, GET MATCHES (for candle), E, N
+
+(Back of House)
+W, GET AXE (for breaking wall), E, E, GET SHOVEL (for window bars), W, S
+
+(In the House again first section)
+W, W, S, S, S, E, S, GET CANDLESTICK (for candle and Treasure!), E, OPEN DRAWER, GET CANDLE (for light),
+LOOK AT CRACK, SWING AXE (to reveal secret room), N, GET SPELLS (for magical barrier and Treasure!),
+READ SPELLS (to learn the word XZANFAR, but don't say it now! otherwise you will teleport somewhere),
+S, W, N, N, GET BATTERIES (for vacuum)
+
+(In the House second section)
+LIGHT CANDLE (candle will run out after 60 turns), N, GET COINS (Treasure!), E, UNLIGHT CANDLE, E, U, E,
+GET SCROLL (Treasure!), W (if bats appear then [SPRAY BATS]), W, D, W, LIGHT CANDLE, W, S, E, E,
+GET STATUE (Treasure!), UNLOCK DOOR (with key), D
+
+(In the House third section)
+UNLIGHT CANDLE, S, E, E, GET PAINTING (Treasure!), W, W (blocked!), SAY XZANFAR, W, S, W, W, 
+GET GOBLET, E, E, N (if a ghost appears then [USE VACUUM]), N, LIGHT CANDLE, U, E, N
+
+(In the House fourth section)
+UNLIGHT CANDLE, E, D, S, OPEN COFFIN, GET RING (last Treasure!), SCORE (Should be 80), N, DIG (break bars), E
+
+(Side of house)
+S, S, GET BOAT (needed to cross marsh), S, W, W, S, DROP BOAT, W, W, W, W, (You should be at the start now and finally), QUIT (Yes we have now all 100 points).....
+
+And that is it!!!
+
+
+
+
+
+

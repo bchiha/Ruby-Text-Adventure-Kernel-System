@@ -2,7 +2,6 @@ module Aks
 	
 	require "csv"
 	require "io/console"
-	require 'ruby-debug'
 
 	class GameEngine
 
@@ -108,7 +107,7 @@ module Aks
 		# {:description=>nil,:place=>nil,:name=>nil,:suitabilities=>[]}
 		def init_objects
 			objectNo = 0
-			objectHash = {:descriptions=>[],:place=>nil,:name=>nil,:suitabilities=>[]}
+			objectHash = {:descriptions=>[],:place=>nil,:name=>nil,:value=>0,:suitabilities=>[]}
 
 			#redo current line in csv (Object 0)
 			csvLine = ["O","0"]
@@ -123,6 +122,8 @@ module Aks
 					@objects[objectNo][:place] = csvLine[1].to_i
 				when "N" #name
 					@objects[objectNo][:name] = Aks::Name.new(csvLine[1..csvLine.count-2],csvLine.last)
+				when "V" #Value
+					@objects[objectNo][:value] += csvLine[1].to_i
 				when "S" #suitability
 					if csvLine[1] == "EX" #Examine has extra text
 						@objects[objectNo][:suitabilities] << Aks::Suitability.new(csvLine[1],csvLine[2],csvLine[3])
@@ -146,7 +147,7 @@ module Aks
 
 			#redo current line in csv (Event 0)
 			csvLine = ["E","0"]
-			while csvLine[0] != "F"
+			while !csvLine.nil? && csvLine[0] != "F"
 				case csvLine[0]
 				when "E" #event
 					eventNo = csvLine[1].to_i
@@ -168,7 +169,7 @@ module Aks
 				Aks::Action.new(csvLine[1])
 			when "GO" #Go
 				Aks::Action.new(csvLine[1],nil,nil,csvLine[2])
-			when "HC" #Halt Counter
+			when "HC", "RC" #Halt/Resume Counter
 				Aks::Action.new(csvLine[1],nil,nil,nil,csvLine[2].to_i)
 			when "IS" #Increment Score
 				Aks::Action.new(csvLine[1],nil,nil,nil,nil,csvLine[2].to_i)
@@ -256,6 +257,7 @@ module Aks
 		# 	Fx ......... Flag x
 		# 	Lx ......... at Location x
 		# 	Ox ......... Object x at current location
+		# 	Rx ......... Random chance of being true where x is whole number between 1-100
 		# 	Wx ......... Wearing object x
 		# 	Vx ......... Visited location x
 		#
@@ -289,7 +291,7 @@ module Aks
 			while charPos < maxPos
 				#get number if condition
 				char = cond[charPos]
-				if "CFLOWV".include?(char)
+				if "CFLORWV".include?(char)
 					ref = ""
 					while charPos+1 != maxPos && cond[charPos+1].is_number?
 						ref += cond[charPos+1]
@@ -315,6 +317,8 @@ module Aks
 					evalStr << "@objects[0][:place] == " << ref
 				when "O" # Object at current location
 					evalStr << "@objects[" << ref << "][:place] == @objects[0][:place]"
+				when "R" # Random
+					evalStr << "Random.rand <= " << ref << ".0/100"
 				when "W" # Wearing
 					evalStr << "@wearing[" << ref << "] == true"
 				when "V" # Visited location
@@ -335,7 +339,7 @@ module Aks
 
 		#get input from the player
 		def get_com_line
-			@comline = (print "What now ? "; $stdin.gets.rstrip)
+			@comline = (print "What now ? "; $stdin.gets.downcase.rstrip)
 		end
 
 		#process the input from the player.  This first looks at the location triggers, then the standard
@@ -429,13 +433,18 @@ module Aks
 						puts("","You can not go that way.")
 					end
 				when "MO" #Move Object
-					@objects[act.obj][:place] = act.loc
+					if act.loc ==  0
+						@objects[act.obj][:place] = Random.rand(1..@locations.size-1) 
+					else
+						@objects[act.obj][:place] = act.loc
+					end
 					@wearing[act.obj] = false
 				when "GE" #Get
 					obj_id = assign_object(act.type)
 					unless obj_id.nil?
 						if @objects[obj_id][:place] == @objects[0][:place]
 							@objects[obj_id][:place] = 0
+							@score += @objects[obj_id][:value]
 							puts("","Taken.")
 						else
 							puts("","You can not see it here.")
@@ -447,6 +456,7 @@ module Aks
 						if @objects[obj_id][:place] == 0
 							@objects[obj_id][:place] = @objects[0][:place]
 							@wearing[obj_id] = false
+							@score -= @objects[obj_id][:value]
 							puts("","Dropped.")
 						else
 							puts("","You do not have it.")
@@ -475,7 +485,7 @@ module Aks
 				when "EX" #Examine
 					obj_id = assign_object(act.type)
 					unless obj_id.nil?
-						if @objects[obj_id][:place] == 0 && @objects[obj_id][:place] == @objects[0][:place]
+						if @objects[obj_id][:place] != 0 && @objects[obj_id][:place] != @objects[0][:place]
 							puts("","You see nothing special.")
 						else
 							suit = @objects[obj_id][:suitabilities].find {|suit| suit.action == "EX"}
@@ -488,6 +498,8 @@ module Aks
 					@count[act.cnum] = act.int
 				when "HC" #Halt Counter
 					@counting[act.cnum] = false
+				when "RC" #Resume Counter
+					@counting[act.cnum] = true
 				when "ZI" #Zap In
 					@objects[act.obj][:place] = @objects[0][:place] #current location
 					@wearing[act.obj] = false
@@ -516,7 +528,7 @@ module Aks
 			objectFound = nil
 			@objects[1..@objects.count].each do |obj|
 				obj[:name].namelist.each do |name|
-					if @comline.pad(2).include?(name.pad(2))
+					if @comline.upcase.pad(2).include?(name.upcase.pad(2))
 						if eval_this(obj[:name].condition)
 							objectFound = obj
 							break
@@ -549,7 +561,7 @@ module Aks
 		def update_countdowns
 			@counting.each_with_index do |isCounting,i|
 				@count[i] -= 1 if isCounting == true
-				if @count[i] == 0
+				if @count[i] <= 0 && isCounting
 					@counting[i] = false
 					process_action(@events[i])
 				end
