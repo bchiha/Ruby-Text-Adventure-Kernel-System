@@ -10,6 +10,6 @@ end
 begin
 	game=Aks::GameEngine.new
 	game.run
-# rescue Exception => e
-# 	puts "Something Bad Happened, Check your csv file. Error is :" << e.message
+rescue Exception => e
+	puts "Something Bad Happened, Check your csv file. Error is :" << e.message
 end
