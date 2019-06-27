@@ -1,4 +1,4 @@
-adventure_kernel_system in Ruby
+Adventure Kernel System in Ruby
 ===============================
 
 The Adventure Kernel System is a text adventure game engine writen initially for the Amstrad.  This is a Ruby port.
@@ -30,7 +30,7 @@ The overall structure is to have three data sections and an end identifier F.  A
 | Events | E |
 | Finish | F |
 
-# Locations
+## Locations
 
 Locations are where the adventure moves to usually via North, East, South and West.  With AKS, Location zero is a special location that can't be reached but contains key triggers that are not location specific.  Like the word **Get**, it can be used in any location, but might not do anything useful.  Locations have the following structure and identifiers.
 
@@ -81,7 +81,7 @@ A, ZO,5
 ```
 Here when the user types 'feed ducks' or 'feed duck' a message will be printed and object 5 (bread) will be zapped out of the game.
 
-# Objects
+## Objects
 
 Objects are things that can be interacted with, like being picked up or looked at.  These include people who are at the location.  Object 0 is a special object that represents the player.  If an object is in Place 0, the user is carrying it.  Objects have the following identifiers.
 
@@ -104,7 +104,7 @@ S, EX, *, It's just a plain oil lamp
 ```
 This object 4, is a lamp, is in location 19, can be called a torch or rusty lamp and can be picked up, dropped an examined.
 
-# Events
+## Events
 
 Events are triggered when an assoociated counter is has reached 0.  The event number matches the counter number.  This could be if after 100 moves, the game is over.  Events have the following identifiers.  Counters decrease every turn unless halted.
 
@@ -120,7 +120,7 @@ A, QU
 ```
 Event 0, (Counter 0), prints a message, displays the score and quits the game
 
-# Conditions
+## Conditions
 
 Conditions are requirements that are to be met or be true if the associated task is to be done.  All conditions must start with an '*' astericks.  And if no condition is needed then it will just have an '*'.  There are six types of conditions that can be checked.  They are
 
@@ -139,11 +139,11 @@ Vx ......... Visited location x
 ```
 For this condition to be met the player must not be carrying object 4 and not object 5 or not carrying object 4 and not object 6 and not wearing object 7 or carrying object 7.  Conditions can be as compllicated as you need them.
 
-# Example Game
+## Example Game
 
 Please have a look at **witch_hunt_aks.csv** for an example on how to use all the AKS elements to create an adventure game.
 
-## REQUIREMENTS:
+# REQUIREMENTS:
 
 * ruby 1.9 or maybe higher?
 
@@ -162,8 +162,8 @@ $ruby adventure.rb <game data.csv>
 
 To run the example game call `$ruby adventure.rb witch_hunt_aks.csv`
 
-## WRITE YOUR OWN ADVENTURE PROGRAM - USBORNE PUBLISHING ISBN 0 86020 741 2
-# By Jenny Tyler and Les Howarth
+## WRITE YOUR OWN ADVENTURE PROGRAM - USBORNE PUBLISHING 
+### By Jenny Tyler and Les Howarth - ISBN 0 86020 741 2
 
 Usborne Publishing printed a book in the 80's on how to write your own adventure games written in Basic.  I've been facinated by this book and have made some attempts to convert this game into more modern code.  One recent convertion is to write the game using [Scratch](https://scratch.mit.edu/projects/130894359/).
 
