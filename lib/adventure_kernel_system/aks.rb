@@ -2,6 +2,7 @@ module Aks
 	
 	require "csv"
 	require "io/console"
+	require "rubyserial"
 
 	class GameEngine
 
@@ -28,12 +29,34 @@ module Aks
 			@counting = []		#Has a counter?,		index=counter number
 			@count = []			#Counter value			index=counter number
 			@score = 0			#Score
+
+			@serial = false     #don't use serial data entry
+
 		end
 		
 		def run
 			#initialise variables and load the adventure game from a data file
 			raise ArgumentError, "Usage: $adventure <aks data file.csv>", caller if ARGV[0].nil?
 			@datafile = CSV.open(ARGV[0], mode="r")
+
+			#ask if want to use serial terminal for data entry
+			response = (print "Do you want to use the Serial Port (Y/N) ? "; $stdin.gets.rstrip.upcase)
+			@serial = response == "Y"
+			#if serial collect serial port info and open connection
+			if @serial
+				response = (print "Port (/dev/tty.usbserial-A50285BI) ? "; $stdin.gets.rstrip.upcase)
+				port = response == "" ? "/dev/tty.usbserial-A50285BI" : response
+				response = (print "Baud (4800) ? "; $stdin.gets.rstrip.upcase)
+				baud = response == "" ? 4800 : response.to_i
+				response = (print "Bits (8) ? "; $stdin.gets.rstrip.upcase)
+				bits = response == "" ? 8 : response.to_i
+				response = (print "Stop Bits (2) ? "; $stdin.gets.rstrip.upcase)
+				stopbits = response == "" ? 2 : response.to_i
+				#now open serial connection
+				printf("\nConnecting to port %s, %d-%d-N-%d\n\n", port, baud, bits, stopbits)
+				@sp = Serial.new(port, baud, bits, :none, stopbits)
+			end
+
 			init_locations
 			init_objects
 			init_events
@@ -188,11 +211,11 @@ module Aks
 
 		#This is the routine which prints out the appropriate description for the current location, 
 		#in a neat and formatted form. The first step is to find the player's current location, 
-		#and then to call describe_ln, to print out the current description. We then test to see
+		#and then to call print_description to print out the current description. We then test to see
 		#if any objects are at the current location. lf there are objects here, we search through
 		#all the objects, printing out the object descriptions for all objects at this location.
 		def describe_loc
-			puts("","",display_exits.rjust(IO.console.winsize[1],'-'),"")
+			puts("","",display_exits.rjust(IO.console.winsize[1],'-'),"")  #display exits and dashes
 			@locations[@objects[0][:place]][:descriptions].each do |desc|
 				if eval_this(desc.condition)
 					puts print_description(desc.text) 
@@ -211,6 +234,7 @@ module Aks
 				end
 			end
 			puts
+			send_lcd_lines() if @serial
 		end
 
 		def display_exits
@@ -223,14 +247,17 @@ module Aks
 			" Exits: " << exits.join(", ") << "  "
 		end
 
-		def print_description(text)
-			max_length = IO.console.winsize[1]
+		#Routine that takes in a line of text and separates it over multiple lines based
+		#on the width required.  Default width is the console width munus one.  Words are
+		#separated by a space, unless a serarator is entered in the function call
+		def print_description(text, width = IO.console.winsize[1]-1, separator = " ")
+			max_length = width
 			result = ""
 			word_array = text.split(/\s|-/)
 			line = word_array.shift
 			word_array.each do |word|
-			  if (line + " " + word).length <= max_length
-			    line << " " + word
+			  if (line + separator + word).length <= max_length
+			    line << separator + word
 			  elsif word.length > max_length
 			    result << line + "\n" unless line.empty?
 			    line = ""
@@ -247,6 +274,30 @@ module Aks
 			  end
 			end
 			result << line
+		end
+
+		#Send out text data for a 20x4 LCD using the Serial Port.  First line is the current exits
+		#and the Score,  The rest will be the inventory contents if any
+		def send_lcd_lines()
+			line = display_exits + "\n"
+			line += "".ljust(20,"-") + "\n\n"
+			line += "Score:" + @score.to_s + "\n"
+			line += "Inventory:\n"
+			inv = []
+			objCarrying = @objects[1..@objects.count].find_all {|obj| obj[:place] == 0}
+			if objCarrying.empty?
+				inv[0] = "Nothing!"
+			else
+				objCarrying.each do |obj|
+					obj[:descriptions].each do |desc|
+						if eval_this(desc.condition)
+							inv << desc.text
+						end
+					end
+				end
+			end
+			line += print_description(inv.join(", "), 20) + "\xFF"  #terminate with 0xFF
+			@sp.write(line)  #send formatted lines to serial port
 		end
 
 		#This method takes in an AKS condition and evaulates it to be either True of False
@@ -339,7 +390,30 @@ module Aks
 
 		#get input from the player
 		def get_com_line
-			@comline = (print "What now ? "; $stdin.gets.downcase.rstrip)
+			if @serial
+				#Get Command line using Serial Port input
+				@comline = ""
+				print "What now ? ";
+				byte = 0
+				while byte != 0x0d
+					byte = @sp.getbyte
+					if !byte.nil?
+						printf("%c",byte)
+						if byte == 0x08  #backspace
+							#remove last character from comline, print space and go back again
+							@comline.chop!
+							printf("%c",0x20)
+							printf("%c",byte)
+						else
+							@comline << byte.chr.downcase
+						end
+					end
+				end
+				@comline = @comline.rstrip
+			else
+				#Get Command line using standard input from terminal
+				@comline = (print "What now ? "; $stdin.gets.downcase.rstrip)
+			end
 		end
 
 		#process the input from the player.  This first looks at the location triggers, then the standard
@@ -560,10 +634,12 @@ module Aks
 		#then do the actions associated with the countdowns event
 		def update_countdowns
 			@counting.each_with_index do |isCounting,i|
-				@count[i] -= 1 if isCounting == true
-				if @count[i] <= 0 && isCounting
-					@counting[i] = false
-					process_action(@events[i])
+				if isCounting == true  #this handles nil cases
+					@count[i] -= 1
+					if @count[i] <= 0
+						@counting[i] = false
+						process_action(@events[i])
+					end
 				end
 			end
 		end
