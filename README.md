@@ -1,11 +1,11 @@
 Adventure Kernel System in Ruby
 ===============================
 
-The Adventure Kernel System is a text adventure game engine writen initially for the Amstrad.  This is a Ruby port.
+The Adventure Kernel System is a text adventure game engine written initially for the Amstrad.  This is a Ruby port.
 
 All credit goes to Mike Lewis and Simon Price.  It is based on their book on 'Writing Adventure Games on the Amstrad' ISBN 0 86161 196 9
 
-I've kept the same input structure being a CSV file so that exisiting games writen in this langauge will (*or should*) work.  Game variables and function names are as similar to the original.
+I've kept the same input structure being a CSV file so that existing games written in this language will (*or should*) work.  Game variables and function names are as similar to the original.
 
 ## Game Iteration
 
@@ -37,7 +37,7 @@ Locations are where the adventure moves to usually via North, East, South and We
 * `L,<number>` Location id with its location number.
 * `D,<condition>,<text>` Description of the location with a condition and text to display if condition is met.
 * `C,<direction>,<condition>,<location>` Connection with the direction to travel, condition and location number to go to if condition is met.
-* `T,<wordlist>,<conditions>` Triggers (words that the user types) have a wordlist that match the trigger and a condtion.  All Triggers must have an action if the condition is met.  These are on the next lines after the trigger.
+* `T,<wordlist>,<conditions>` Triggers (words that the user types) have a word list that match the trigger and a condtion.  All Triggers must have an action if the condition is met.  These are on the next lines after the trigger.
 * `A,<actiontype>,<actiondata>`  An action with an action type and its associated action data.  Every action has a different set of data.  Like to print a message will have some text, or to update a flag will have the flag number and its boolean value.
 
 Here are all valid action types and their data
@@ -90,7 +90,7 @@ Objects are things that can be interacted with, like being picked up or looked a
 * `N,<namelist>,<conditions>` Name of the object that the user can type to interact with it.  The name list could contain multiple verbs.  And a condition to be true to have it useable
 * `P,<location>` The Place where the object is found.
 * `V,<number>` [Optional], if object is carried, add a score value of number. Defaults to 0
-* `S,<actiontype>,<condition>,<text>` Suitability to the action.  If something can be picked up or droped then this object will have the action type of 'GE' and 'DR', if the action is 'EX', then display a text for describing the object.  Not all actiontype are used, 
+* `S,<actiontype>,<condition>,<text>` Suitability to the action.  If something can be picked up or dropped then this object will have the action type of 'GE' and 'DR', if the action is 'EX', then display a text for describing the object.  Not all actiontype are used, 
 
 Here is an example of an Object
 ```
@@ -106,7 +106,7 @@ This object 4, is a lamp, is in location 19, can be called a torch or rusty lamp
 
 ## Events
 
-Events are triggered when an assoociated counter is has reached 0.  The event number matches the counter number.  This could be if after 100 moves, the game is over.  Events have the following identifiers.  Counters decrease every turn unless halted.
+Events are triggered when an associated counter is has reached 0.  The event number matches the counter number.  This could be if after 100 moves, the game is over.  Events have the following identifiers.  Counters decrease every turn unless halted.
 
 * `E,<counter number>` Event id with the associated counter number
 * `A,<actiontype>,<actiondata>`  An action with an action type and its associated action data.  Every action has a different set of data.  Like to print a message will have some text, or to update a flag will have the flag number and its boolean value. See Triggers for all actions
@@ -122,7 +122,7 @@ Event 0, (Counter 0), prints a message, displays the score and quits the game
 
 ## Conditions
 
-Conditions are requirements that are to be met or be true if the associated task is to be done.  All conditions must start with an '*' astericks.  And if no condition is needed then it will just have an '*'.  There are six types of conditions that can be checked.  They are
+Conditions are requirements that are to be met or be true if the associated task is to be done.  All conditions must start with an '*' asterisk.  And if no condition is needed then it will just have an '*'.  There are six types of conditions that can be checked.  They are
 
 ```
 Cx ......... Carrying object x
@@ -137,7 +137,7 @@ Vx ......... Visited location x
 ```
 .-((C4.C5)/(C4.C6.W7/C7))
 ```
-For this condition to be met the player must not be carrying object 4 and not object 5 or not carrying object 4 and not object 6 and not wearing object 7 or carrying object 7.  Conditions can be as compllicated as you need them.
+For this condition to be met the player must not be carrying object 4 and not object 5 or not carrying object 4 and not object 6 and not wearing object 7 or carrying object 7.  Conditions can be as complicated as you need them.
 
 ## Example Game
 
@@ -146,6 +146,7 @@ Please have a look at **witch_hunt_aks.csv** for an example on how to use all th
 # REQUIREMENTS:
 
 * ruby 1.9 or maybe higher?
+* [rubyserial](https://rubygems.org/gems/rubyserial/) gem
 
 ## SETUP and FILE DESCRIPTIONS
 
@@ -167,7 +168,7 @@ To run the example game call `$ruby adventure.rb witch_hunt_aks.csv`
 
 Usborne Publishing printed a book in the 80's on how to write your own adventure games written in Basic.  I've been facinated by this book and have made some attempts to convert this game into more modern code.  One recent convertion is to write the game using [Scratch](https://scratch.mit.edu/projects/130894359/).
 
-I have also converted this game to use AKS.  You can now play this game using this game engine.  The game has simple descriptions and a fairly easy game to solve.  I've made some small changes to the origial AKS to include features needed for this game, like randomness, teleporting the player, halting and resuming timers and scoring on carried objects.
+I have also converted this game to use AKS.  You can now play this game using this game engine.  The game has simple descriptions and a fairly easy game to solve.  I've made some small changes to the original AKS to include features needed for this game, like randomness, teleporting the player, halting and resuming timers and scoring on carried objects.
 
 To play this game call `$ruby adventure.rb haunted_house_aks.csv`
 
